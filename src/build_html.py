@@ -44,8 +44,9 @@ HTML_FORMAT = '''
 		<br><hr>
 		
 		<p>
-			<a href="recipes.html">all recipes</a>&ensp;
-			<a href="tags.html">all tags</a>&ensp;
+			<a href="recipes.html">browse recipes</a>&ensp;
+			<a href="tags.html">browse tags</a>&ensp;
+            <a href="edit.html">edit site</a>&ensp;
 		</p>
 	</body>
 </html>
