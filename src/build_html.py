@@ -97,12 +97,12 @@ def build_html(input_filename, output_filename):
         tags = parse_tags(input_json['tags'])
         
         recipe_html = HTML_FORMAT % (title,title,image,cook_time,servings,calories_per_serving,ingredients,directions,references,tags)
-
         output_file.write(recipe_html)
 
         print("Successfully built " + output_filename)
-    except Exception:
-        print("Failed to parse recipe data")
+    except Exception as e:
+        print("Failed to parse recipe data:")
+        print(str(e))
     #end try/except
 
     input_file.close()
@@ -110,19 +110,36 @@ def build_html(input_filename, output_filename):
 #end build_html()
 
 def parse_ingredients_list(ingredients_json):
-    return str(ingredients_json)
+    ingredients_html = ""
+
+    for ingredient in ingredients_json:
+        ingredients_html = ingredients_html + "<li>" + ingredient + "</li>"
+    #endfor
+    
+    return ingredients_html
 #end parse_ingredients_list()
 
 def parse_directions(directions_json):
-    return str(directions_json)
+    return directions_json.replace("/p","</p><p>")
 #end parse_directions()
 
 def parse_references(references_json):
-    return str(references_json)
+    references_html = ""
+
+    for reference in references_json:
+        references_html = references_html + "<li><a href=\"" + reference['link'] + "\">"+ reference['name'] + "</a></li>"
+    #endfor
+    
+    return references_html
 #end parse_references()
 
 def parse_tags(tags_json):
-    return str(tags_json)
+    tags_html = ""
+
+    for tag in tags_json:
+        tags_html = tags_html + "<a href=\"tags/" + tag + ".html\">" + tag + "</a>&ensp;"
+    #endfor
+    return tags_html
 #end parse_tags()
 
 if __name__ == "__main__":
