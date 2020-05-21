@@ -63,6 +63,27 @@ def main():
     build_html_file(input_filename,output_filename)
 #end main
 
+def parse_file(filename):
+    try:
+        input_file = open(filename,"r")
+    except Exception as e:
+        print("Failed to open input file")
+        print(e)
+        return None
+    #end try/except
+
+    try:
+        input_json = json.load(input_file)
+        input_file.close()
+    except Exception:
+        print("Failed to parse input json")
+        input_file.close()
+        return None
+    #end try/except
+
+    return input_json
+#end parse_file
+
 def build_html(input_json):
     try:
         title     = input_json['title']
@@ -86,21 +107,8 @@ def build_html(input_json):
 #end build_html()
 
 def build_html_file(input_filename, output_filename):
-    try:
-        input_file = open(input_filename,"r")
-    except Exception:
-        print("Failed to open input file")
-        return
-    #end try/except
-
-    try:
-        input_json = json.load(input_file)
-        input_file.close()
-    except Exception:
-        print("Failed to parse input json")
-        input_file.close()
-        return
-    #end try/except
+    input_json = parse_file(input_filename)
+    if(input_json == None): return
 
     try:
         output_file = open(output_filename,"w")
@@ -110,7 +118,7 @@ def build_html_file(input_filename, output_filename):
     #end try/except
 
     recipe_html = build_html(input_json)
-    
+
     output_file.write(recipe_html)
     output_file.close()
 #end build_html()
