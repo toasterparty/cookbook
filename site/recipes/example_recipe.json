@@ -1,0 +1,16 @@
+{
+    "title":"Damn Good Potatoes",
+    "image":"https://ih1.redbubble.net/image.879700851.8546/fpp,small,lustre,wall_texture,product,750x1000.jpg",
+    "cook_time":"30 minutes",
+    "servings":"2",
+    "calories_per_serving":"300",
+    "ingredients":[
+        "Fucking Potatoes",
+        "1x Water"
+    ],
+    "directions":"Take the potatoes and put them in the water. Boil the water for like a dozen minutes or so, stirring if you feel like it. Remove the water because you will just want to eat the potatoes and not the resulting potato water. Serve warm. /p This is basically just sample text. I just wanted to know what this section looks like when populated with a few paraphrahs.",
+    "references":[
+        {"name":"Food Network Recipe","link":"https://www.foodnetwork.com/recipes/food-network-kitchen/boiled-potatoes-with-butter-recipe-1944015"}
+    ],
+    "tags":["potatoes","breakfast","lunch","dinner"]
+}

@@ -60,10 +60,32 @@ def main():
         print("invalid argument(s)\nusage - build_html.py input.json output.html")
     #end try/except
 
-    build_html(input_filename,output_filename)
+    build_html_file(input_filename,output_filename)
 #end main
 
-def build_html(input_filename, output_filename):
+def build_html(input_json):
+    try:
+        title     = input_json['title']
+        image     = input_json['image']
+        cook_time = input_json['cook_time']
+        servings  = input_json['servings']
+        calories_per_serving = input_json['calories_per_serving']
+        ingredients = parse_ingredients_list(input_json['ingredients'])
+        directions = parse_directions(input_json['directions'])
+        references = parse_references(input_json['references'])
+        tags = parse_tags(input_json['tags'])
+        
+        recipe_html = HTML_FORMAT % (title,title,image,cook_time,servings,calories_per_serving,ingredients,directions,references,tags)
+    except Exception as e:
+        print("Failed to parse recipe data:")
+        print(str(e))
+        recipe_html = "invalid recipe data record"
+    #end try/except
+
+    return recipe_html
+#end build_html()
+
+def build_html_file(input_filename, output_filename):
     try:
         input_file = open(input_filename,"r")
     except Exception:
@@ -73,6 +95,7 @@ def build_html(input_filename, output_filename):
 
     try:
         input_json = json.load(input_file)
+        input_file.close()
     except Exception:
         print("Failed to parse input json")
         input_file.close()
@@ -86,27 +109,9 @@ def build_html(input_filename, output_filename):
         return
     #end try/except
 
-    try:
-        title     = input_json['title']
-        image     = input_json['image']
-        cook_time = input_json['cook_time']
-        servings  = input_json['servings']
-        calories_per_serving = input_json['calories_per_serving']
-        ingredients = parse_ingredients_list(input_json['ingredients'])
-        directions = parse_directions(input_json['directions'])
-        references = parse_references(input_json['references'])
-        tags = parse_tags(input_json['tags'])
-        
-        recipe_html = HTML_FORMAT % (title,title,image,cook_time,servings,calories_per_serving,ingredients,directions,references,tags)
-        output_file.write(recipe_html)
-
-        print("Successfully built " + output_filename)
-    except Exception as e:
-        print("Failed to parse recipe data:")
-        print(str(e))
-    #end try/except
-
-    input_file.close()
+    recipe_html = build_html(input_json)
+    
+    output_file.write(recipe_html)
     output_file.close()
 #end build_html()
 
