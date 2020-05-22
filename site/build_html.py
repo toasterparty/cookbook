@@ -44,9 +44,10 @@ HTML_FORMAT = '''
 		<br><hr>
 		
 		<p>
-			<a href="/recipes.html">browse recipes</a>&ensp;
-			<a href="/tags.html">browse tags</a>&ensp;
-            <a href="/edit.html">edit site</a>&ensp;
+            <a href="/index.html">Home</a>&ensp;
+			<a href="/recipes.html">Browse Recipes</a>&ensp;
+			<a href="/tags.html">Browse Tags</a>&ensp;
+            <a href="/edit.html">Edit Site</a>&ensp;
 		</p>
 	</body>
 </html>
@@ -151,7 +152,7 @@ def parse_tags(tags_json):
     tags_html = ""
 
     for tag in tags_json:
-        tags_html = tags_html + "<a href=\"tags/" + tag + ".html\">" + tag + "</a>&ensp;"
+        tags_html = tags_html + "<a href=\"/tags/" + tag + ".html\">" + tag + "</a>&ensp;"
     #endfor
     return tags_html
 #end parse_tags()

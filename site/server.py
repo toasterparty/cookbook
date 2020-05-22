@@ -10,16 +10,12 @@ app = Flask(__name__)
 # static routes #
 
 @app.route('/')
-def root(): return render_template("index.html")
+def root():
+    return render_template("index.html")
 
-@app.route('/index.html')
-def index(): return render_template("index.html")
-
-@app.route('/edit.html')
-def edit(): return render_template("edit.html")
-
-@app.route('/new_recipe.html')
-def new_recipe(): return render_template("new_recipe.html")
+@app.route('/<page>')
+def static_route(page):
+    return render_template(page)
 
 # static routes - dynamic pages #
 
@@ -92,6 +88,11 @@ def recipes():
     return RECIPES_FORMAT % (table_html)
 # end recipes()
 
+@app.route('/tags.html')
+def tags():
+    return 'not implemented'
+# end recipes()
+
 # dynamic routes - dynamic pages #
 
 @app.route('/recipes/<page>')
@@ -100,6 +101,11 @@ def recipe(page):
     if(input_json == None): return "recipe not found or corrupted"
 
     return build_html(input_json)
+#end recipe()
+
+@app.route('/tags/<page>')
+def tag(page):
+    return 'not implemented'
 #end recipe()
 
 if __name__ == '__main__':
