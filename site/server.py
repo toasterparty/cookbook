@@ -23,20 +23,73 @@ def new_recipe(): return render_template("new_recipe.html")
 
 # static routes - dynamic pages #
 
+RECIPES_FORMAT = '''
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>All Recipes</title>
+		<style type="text/css">body{margin:40px auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0 10px}h1,h2,h3{line-height:1.2}</style>
+        <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        </style>
+	</head>
+	<body>
+		<h1>All Recipes</h1>
+        <p>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Calories Per Serving</th>
+                    <th>Cook Time</th>
+                </tr>
+                %s
+            </table>
+        </p>
+	</body>
+</html>
+'''
+
+RECIPES_TABLE_ROW_FORMAT = '''
+<tr>
+    <th><a href="%s">%s</a></th>
+    <th>%s</th>
+    <th>%s</th>
+</tr>
+'''
+
 @app.route('/recipes.html')
 def recipes():
-    return_html = ''
+    table_html = ''
 
     directory = os.fsencode("./recipes")
     for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".json"): 
-            filename = filename.replace('.json','')
-            return_html = str(filename)
-        #endif
+        try:
+            filename = os.fsdecode(file)
+            if filename.endswith(".json"): 
+                recipe_json = parse_file('./recipes/' + filename)
+                table_html = table_html + (RECIPES_TABLE_ROW_FORMAT % ('/recipes/' + filename.replace('.json','.html'),recipe_json['title'],recipe_json['calories_per_serving'],recipe_json['cook_time']))
+            #endif
+        except Exception as e:
+            print(filename + ' error:')
+            print('\t' + str(e))
     #endfor
 
-    return return_html
+    return RECIPES_FORMAT % (table_html)
 # end recipes()
 
 # dynamic routes - dynamic pages #
