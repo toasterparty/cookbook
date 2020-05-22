@@ -2,11 +2,16 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Delete Recipe</title>
-		<style type="text/css">body{margin:40px auto;max-width:650px;line-height:1.6;font-size:18px;color:#444;padding:0 10px}h1,h2,h3{line-height:1.2}</style>
+		<title>New Recipe</title>
+		<style type="text/css">body{margin:40px auto;max-width:850px;line-height:1.2;font-size:18px;color:#444;padding:0 10px}h1,h2,h3{line-height:1.2}</style>
 	</head>
 	<body>
-        <h1>Delete Recipe</h1>
-        <p></p>
+        <h1>New Recipe</h1>
+        <form action = "http://localhost:5000/delete_result" method = "POST">
+			<p><strong>Title of recipe to be deleted: </strong> <input type = "text" name = "title" width ="40" placeholder="My Recipe"/></p>
+			<p><strong>The word 'DELETE' in all caps to prove you really mean it: </strong> <br> <input type = "text" name = "delete" width ="40" placeholder="DELETE"/></p>
+			<br>
+			<p><input type = "submit" value = "submit" /></p>
+		 </form>
 	</body>
 </html>

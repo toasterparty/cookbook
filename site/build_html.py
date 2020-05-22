@@ -87,6 +87,13 @@ def parse_file(filename):
 
 def build_html(input_json):
     try:
+        try:
+            if(input_json['deleted'] == True):
+                return "Tried to load deleted recipe"
+        except Exception:
+            pass
+        #endif
+
         title     = input_json['title']
         
         image     = input_json['image']

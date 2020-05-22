@@ -22,7 +22,7 @@ def static_route(page):
 # static routes - dynamic pages #
 
 @app.route('/add_result', methods = ['POST'])
-def result():
+def add_result():
     form = request.form
     try:
         title = str(form['title'])
@@ -94,6 +94,40 @@ def result():
     return 'success'
 #end
 
+@app.route('/delete_result', methods = ['POST'])
+def delete_result():
+    try:
+        form = request.form
+        if(form['delete'] != 'DELETE'):
+            return "you weren't serious enough"
+        #endif
+
+        title = str(form['title'])
+        filename = "./recipes/" + title + ".json"
+        print('filename' + filename)
+
+        if(not os.path.exists(filename)):
+            return "Error: Recipe of that name doesn't exist"
+        #endif
+
+
+        input_file = open(filename,"r")
+        input_json = json.load(input_file)
+        input_file.close()
+
+        input_json['deleted'] = True
+
+        output_file = open(filename,"w")
+        output_file.write(json.dumps(input_json))
+        output_file.close()
+
+    except Exception as e:
+        return "Internal error: " + str(e)
+    #end tryexcept
+
+    return "successfully deleted recipe"
+#end
+
 RECIPES_FORMAT = '''
 <!DOCTYPE html>
 <html>
@@ -153,6 +187,13 @@ def recipes():
             filename = os.fsdecode(file)
             if filename.endswith(".json"): 
                 recipe_json = parse_file('./recipes/' + filename)
+
+                try:
+                    if(recipe_json['deleted'] == True):
+                        continue
+                except Exception:
+                    pass
+
                 table_html = table_html + (RECIPES_TABLE_ROW_FORMAT % ('/recipes/' + filename.replace('.json','.html'),recipe_json['title'],recipe_json['calories_per_serving'],recipe_json['cook_time']))
             #endif
         except Exception as e:
