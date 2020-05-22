@@ -88,14 +88,23 @@ def parse_file(filename):
 def build_html(input_json):
     try:
         title     = input_json['title']
+        
         image     = input_json['image']
+        if(image == None): image = ''
+
         cook_time = input_json['cook_time']
+        if(cook_time == None): cook_time = ''
+
         servings  = input_json['servings']
+        if(servings == None): servings = ''
+
         calories_per_serving = input_json['calories_per_serving']
+        if(calories_per_serving == None): calories_per_serving = ''
+
         ingredients = parse_ingredients_list(input_json['ingredients'])
-        directions = parse_directions(input_json['directions'])
-        references = parse_references(input_json['references'])
-        tags = parse_tags(input_json['tags'])
+        directions  = parse_directions(input_json['directions'])
+        references  = parse_references(input_json['references'])
+        tags        = parse_tags(input_json['tags'])
         
         recipe_html = HTML_FORMAT % (title,title,image,cook_time,servings,calories_per_serving,ingredients,directions,references,tags)
     except Exception as e:
@@ -125,8 +134,9 @@ def build_html_file(input_filename, output_filename):
 #end build_html()
 
 def parse_ingredients_list(ingredients_json):
-    ingredients_html = ""
+    if(ingredients_json == None): return ''
 
+    ingredients_html = ""
     for ingredient in ingredients_json:
         ingredients_html = ingredients_html + "<li>" + ingredient + "</li>"
     #endfor
@@ -135,12 +145,15 @@ def parse_ingredients_list(ingredients_json):
 #end parse_ingredients_list()
 
 def parse_directions(directions_json):
+    if(directions_json == None): return ''
+
     return directions_json.replace("/p","</p><p>")
 #end parse_directions()
 
 def parse_references(references_json):
-    references_html = ""
+    if(references_json == None): return ''
 
+    references_html = ""
     for reference in references_json:
         references_html = references_html + "<li><a href=\"" + reference['link'] + "\">"+ reference['name'] + "</a></li>"
     #endfor
@@ -149,8 +162,9 @@ def parse_references(references_json):
 #end parse_references()
 
 def parse_tags(tags_json):
-    tags_html = ""
+    if(tags_json == None): return ''
 
+    tags_html = ""
     for tag in tags_json:
         tags_html = tags_html + "<a href=\"/tags/" + tag + ".html\">" + tag + "</a>&ensp;"
     #endfor

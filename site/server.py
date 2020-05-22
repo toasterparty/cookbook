@@ -1,9 +1,8 @@
 import os
+import sys
 import json
-from flask import Flask
-from flask import render_template
-from build_html import build_html
-from build_html import parse_file
+from flask import Flask, render_template, request
+from build_html import build_html, parse_file
 
 app = Flask(__name__)
 
@@ -15,9 +14,85 @@ def root():
 
 @app.route('/<page>')
 def static_route(page):
+    if(page == "add_result"):
+        return ""
+    
     return render_template(page)
 
 # static routes - dynamic pages #
+
+@app.route('/add_result', methods = ['POST'])
+def result():
+    form = request.form
+    try:
+        title = str(form['title'])
+
+        if(os.path.exists("./recipes/" + title + ".json")):
+            return "Error: Recipe already exists"
+        #endif
+
+        recipe_json = json.loads(json.dumps(form))
+
+        if(not (str(form['image']).startswith("h"))):
+            recipe_json['image'] = None
+
+        if(len(str(form['cook_time'])) < 1):
+            recipe_json['None'] = None
+
+        if(len(str(form['servings'])) < 1):
+            recipe_json['servings'] = None
+        
+        if(len(str(form['calories_per_serving'])) < 1):
+            recipe_json['calories_per_serving'] = None
+
+        if(len(str(form['ingredients'])) < 1):
+            recipe_json['ingredients'] = None
+        else:
+            recipe_json['ingredients'] = str(form['ingredients']).split(',')
+        #end else
+
+        directions = str(form['directions']).replace('\n','')
+
+        if(len(str(form['references'])) < 1):
+            recipe_json['references'] = None
+            print("no references")
+        else:
+            references_raw = form['references'].split(',')
+            print("references_raw: " + str(references_raw))
+            references = list()
+            for reference_raw in references_raw:
+                reference_split = reference_raw.split(':', 1)
+                print("reference_split: " + str(reference_split))
+                if(len(reference_split) != 2): continue
+
+                reference = dict()
+                reference['name'] = reference_split[0]
+                reference['link'] = reference_split[1]
+                references.append(reference)
+            #endfor
+            recipe_json['references'] = references
+
+        if(len(str(form['tags'])) < 1):
+            recipe_json['tags'] = None
+        else:
+            recipe_json['tags'] = str(form['tags']).split(',')
+        #endif
+        
+        recipe_json_str = json.dumps(recipe_json)
+        print(recipe_json_str)
+        
+        output_file = open("./recipes/" + title + ".json","w")
+        output_file.write(recipe_json_str)
+        return build_html(recipe_json)
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno)
+
+        return 'Internal error: ' + str(e)
+
+    return 'success'
+#end
 
 RECIPES_FORMAT = '''
 <!DOCTYPE html>
