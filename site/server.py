@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from build_html import build_html, parse_file
 
 app = Flask(__name__)
@@ -12,9 +12,13 @@ app = Flask(__name__)
 def root():
     return render_template("index.html")
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('./', 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route('/<page>')
 def static_route(page):
-    if(page == "add_result"):
+    if(page == "add_result" or page == "delete_result"):
         return ""
     
     return render_template(page)
